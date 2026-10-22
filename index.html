@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Morse - Télégraphe Virtuel</title>
+    <title>Code Morse - Télégraphe Professionnel</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,7 @@
             position: relative;
         }
 
-        /* Fond avec texture et effet */
+        /* Fond complexe avec plusieurs couches */
         body::before {
             content: '';
             position: fixed;
@@ -28,19 +28,37 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(ellipse at center, rgba(30, 20, 10, 0.8) 0%, rgba(0, 0, 0, 1) 100%),
+                radial-gradient(ellipse at 20% 30%, rgba(40, 25, 10, 0.6) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(30, 20, 10, 0.6) 0%, transparent 50%),
+                radial-gradient(ellipse at center, rgba(20, 15, 8, 0.9) 0%, rgba(0, 0, 0, 1) 100%),
                 repeating-linear-gradient(
                     0deg,
                     transparent,
                     transparent 2px,
-                    rgba(139, 90, 43, 0.03) 2px,
-                    rgba(139, 90, 43, 0.03) 4px
+                    rgba(139, 90, 43, 0.02) 2px,
+                    rgba(139, 90, 43, 0.02) 4px
                 );
             pointer-events: none;
             z-index: 0;
         }
 
-        /* Particules flottantes */
+        /* Grille de fond subtile */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Particules flottantes améliorées */
         .particles {
             position: fixed;
             top: 0;
@@ -58,6 +76,7 @@
             background: rgba(212, 175, 55, 0.6);
             border-radius: 50%;
             animation: float 15s infinite;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
         }
 
         @keyframes float {
@@ -80,93 +99,169 @@
         .container {
             position: relative;
             z-index: 2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 60px;
+            padding: 40px;
+            max-width: 1600px;
+            margin: 0 auto;
             min-height: 100vh;
-            gap: 80px;
-            padding: 40px 20px;
-            flex-wrap: wrap;
+            align-items: start;
         }
 
-        /* Section du bouton télégraphe */
+        /* Section principale du télégraphe */
         .telegraph-section {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 30px;
+            position: sticky;
+            top: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         .title {
             color: #d4af37;
-            font-size: 32px;
+            font-size: 36px;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 4px;
-            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
-            text-align: center;
+            letter-spacing: 6px;
+            text-shadow: 
+                0 0 20px rgba(212, 175, 55, 0.5),
+                0 0 40px rgba(212, 175, 55, 0.3);
+            margin-bottom: 10px;
         }
 
         .subtitle {
             color: #8b7355;
             font-size: 14px;
-            letter-spacing: 2px;
-            text-align: center;
-            margin-top: -20px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
         }
 
-        /* Bouton télégraphe réaliste en 3D */
-        .telegraph-base {
+        /* Télégraphe ultra-détaillé */
+        .telegraph-machine {
             position: relative;
-            width: 280px;
-            height: 280px;
+            width: 320px;
+            height: 320px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* Base en bois */
+        /* Base en bois avec texture */
         .wood-base {
             position: absolute;
-            width: 260px;
-            height: 260px;
-            background: linear-gradient(145deg, #3d2817, #2a1810);
-            border-radius: 20px;
+            width: 300px;
+            height: 300px;
+            background: 
+                linear-gradient(145deg, #4a3020, #3d2817, #2a1810),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 10px,
+                    rgba(0, 0, 0, 0.1) 10px,
+                    rgba(0, 0, 0, 0.1) 11px
+                );
+            border-radius: 25px;
             box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.8),
-                inset 0 2px 4px rgba(255, 255, 255, 0.1),
-                inset 0 -2px 4px rgba(0, 0, 0, 0.5);
-            border: 3px solid #1a0f08;
+                0 25px 70px rgba(0, 0, 0, 0.9),
+                0 10px 30px rgba(0, 0, 0, 0.7),
+                inset 0 3px 6px rgba(255, 255, 255, 0.1),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.5);
+            border: 4px solid #1a0f08;
         }
 
-        /* Plaque en laiton */
+        /* Vis de fixation */
+        .screw {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(145deg, #8b6914, #5a4510);
+            border-radius: 50%;
+            box-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.6),
+                inset 0 1px 2px rgba(255, 255, 255, 0.3),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .screw::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 2px;
+            background: #2a1810;
+            border-radius: 1px;
+        }
+
+        .screw-tl { top: 20px; left: 20px; }
+        .screw-tr { top: 20px; right: 20px; }
+        .screw-bl { bottom: 20px; left: 20px; }
+        .screw-br { bottom: 20px; right: 20px; }
+
+        /* Plaque en laiton avec détails */
         .brass-plate {
             position: absolute;
-            width: 200px;
-            height: 200px;
-            background: linear-gradient(145deg, #d4af37, #b8941f);
+            width: 220px;
+            height: 220px;
+            background: 
+                radial-gradient(circle at 30% 30%, #e8c547, #d4af37, #b8941f),
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 5px,
+                    rgba(255, 255, 255, 0.05) 5px,
+                    rgba(255, 255, 255, 0.05) 6px
+                );
             border-radius: 50%;
             box-shadow: 
-                0 8px 20px rgba(0, 0, 0, 0.6),
-                inset 0 2px 8px rgba(255, 255, 255, 0.3),
-                inset 0 -2px 8px rgba(0, 0, 0, 0.4);
-            border: 2px solid #8b6914;
+                0 10px 25px rgba(0, 0, 0, 0.7),
+                inset 0 3px 10px rgba(255, 255, 255, 0.4),
+                inset 0 -3px 10px rgba(0, 0, 0, 0.5);
+            border: 3px solid #8b6914;
         }
 
-        /* Bouton principal */
+        /* Gravure sur la plaque */
+        .brass-plate::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border: 2px solid rgba(139, 105, 20, 0.5);
+            border-radius: 50%;
+        }
+
+        /* Bouton principal avec détails mécaniques */
         #morse-btn {
             position: relative;
-            width: 160px;
-            height: 160px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
             border: none;
-            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            background: 
+                radial-gradient(circle at 30% 30%, #3a3a3a, #2a2a2a, #1a1a1a),
+                repeating-radial-gradient(
+                    circle at center,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.02) 2px,
+                    rgba(255, 255, 255, 0.02) 3px
+                );
             cursor: pointer;
             box-shadow: 
-                0 15px 35px rgba(0, 0, 0, 0.8),
-                0 5px 15px rgba(0, 0, 0, 0.6),
-                inset 0 2px 4px rgba(255, 255, 255, 0.2),
-                inset 0 -2px 4px rgba(0, 0, 0, 0.8);
+                0 20px 40px rgba(0, 0, 0, 0.9),
+                0 8px 20px rgba(0, 0, 0, 0.7),
+                inset 0 3px 6px rgba(255, 255, 255, 0.2),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.9);
             transition: all 0.1s ease;
             user-select: none;
             -webkit-user-select: none;
@@ -177,12 +272,12 @@
         #morse-btn::before {
             content: '';
             position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            bottom: 10px;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1), transparent);
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15), transparent);
             pointer-events: none;
         }
 
@@ -192,66 +287,160 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 48px;
+            font-size: 56px;
             color: #d4af37;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            text-shadow: 
+                0 0 15px rgba(212, 175, 55, 0.6),
+                0 0 30px rgba(212, 175, 55, 0.3);
             pointer-events: none;
         }
 
         #morse-btn:active,
         #morse-btn.active {
-            transform: translateY(8px);
+            transform: translateY(12px);
             box-shadow: 
-                0 5px 15px rgba(0, 0, 0, 0.8),
-                0 2px 8px rgba(0, 0, 0, 0.6),
-                inset 0 2px 4px rgba(0, 0, 0, 0.8),
-                inset 0 -1px 2px rgba(255, 255, 255, 0.1);
+                0 8px 20px rgba(0, 0, 0, 0.9),
+                0 3px 10px rgba(0, 0, 0, 0.7),
+                inset 0 3px 6px rgba(0, 0, 0, 0.9),
+                inset 0 -1px 3px rgba(255, 255, 255, 0.1);
         }
 
         #morse-btn.active::after {
             color: #ffd700;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-            animation: glow 0.3s ease-in-out;
+            text-shadow: 
+                0 0 25px rgba(255, 215, 0, 1),
+                0 0 50px rgba(255, 215, 0, 0.6);
+            animation: glow 0.2s ease-in-out;
         }
 
         @keyframes glow {
             0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.5); }
+            50% { filter: brightness(2); }
         }
 
-        /* Indicateur LED */
+        /* Indicateur LED amélioré */
         .led-indicator {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 12px;
-            height: 12px;
+            top: 25px;
+            right: 25px;
+            width: 14px;
+            height: 14px;
             background: #333;
             border-radius: 50%;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.8);
+            box-shadow: 
+                inset 0 2px 4px rgba(0, 0, 0, 0.9),
+                0 1px 2px rgba(255, 255, 255, 0.1);
             transition: all 0.1s;
         }
 
         .led-indicator.active {
             background: #ff0000;
             box-shadow: 
-                0 0 10px rgba(255, 0, 0, 0.8),
-                0 0 20px rgba(255, 0, 0, 0.4),
-                inset 0 1px 2px rgba(255, 255, 255, 0.3);
+                0 0 15px rgba(255, 0, 0, 1),
+                0 0 30px rgba(255, 0, 0, 0.6),
+                0 0 45px rgba(255, 0, 0, 0.3),
+                inset 0 2px 4px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Panneau de statistiques */
+        .stats-panel {
+            background: linear-gradient(145deg, rgba(30, 20, 10, 0.95), rgba(20, 15, 8, 0.98));
+            border: 2px solid #8b6914;
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 300px;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.7),
+                inset 0 1px 2px rgba(255, 255, 255, 0.1);
+        }
+
+        .stats-title {
+            color: #d4af37;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 1px solid #8b6914;
+            padding-bottom: 10px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(139, 105, 20, 0.2);
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: #8b7355;
+            font-size: 13px;
+        }
+
+        .stat-value {
+            color: #d4af37;
+            font-size: 16px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Historique des transmissions */
+        .history-panel {
+            background: linear-gradient(145deg, rgba(30, 20, 10, 0.95), rgba(20, 15, 8, 0.98));
+            border: 2px solid #8b6914;
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 300px;
+            max-height: 150px;
+            overflow-y: auto;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.7),
+                inset 0 1px 2px rgba(255, 255, 255, 0.1);
+        }
+
+        .history-title {
+            color: #d4af37;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 1px solid #8b6914;
+            padding-bottom: 10px;
+        }
+
+        .history-item {
+            color: #8b7355;
+            font-size: 12px;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(139, 105, 20, 0.1);
+            font-family: 'Courier New', monospace;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
         }
 
         /* Panneau de référence */
         .reference-panel {
-            background: linear-gradient(145deg, rgba(30, 20, 10, 0.9), rgba(20, 15, 8, 0.95));
+            background: linear-gradient(145deg, rgba(30, 20, 10, 0.95), rgba(20, 15, 8, 0.98));
             border: 2px solid #8b6914;
             border-radius: 15px;
-            padding: 30px;
-            max-width: 500px;
-            max-height: 85vh;
+            padding: 35px;
+            max-height: 90vh;
             overflow-y: auto;
             box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.8),
-                inset 0 1px 2px rgba(255, 255, 255, 0.1);
+                0 25px 70px rgba(0, 0, 0, 0.9),
+                inset 0 2px 4px rgba(255, 255, 255, 0.1);
             position: relative;
         }
 
@@ -262,55 +451,88 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: repeating-linear-gradient(
-                90deg,
-                transparent,
-                transparent 20px,
-                rgba(139, 105, 20, 0.05) 20px,
-                rgba(139, 105, 20, 0.05) 21px
-            );
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 20px,
+                    rgba(139, 105, 20, 0.03) 20px,
+                    rgba(139, 105, 20, 0.03) 21px
+                ),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 20px,
+                    rgba(139, 105, 20, 0.03) 20px,
+                    rgba(139, 105, 20, 0.03) 21px
+                );
             pointer-events: none;
             border-radius: 15px;
         }
 
         .panel-title {
             color: #d4af37;
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-            border-bottom: 2px solid #8b6914;
-            padding-bottom: 15px;
+            letter-spacing: 4px;
+            text-shadow: 
+                0 0 15px rgba(212, 175, 55, 0.4),
+                0 0 30px rgba(212, 175, 55, 0.2);
+            border-bottom: 3px solid #8b6914;
+            padding-bottom: 20px;
+            position: relative;
+        }
+
+        .panel-title::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
         }
 
         .section-title {
             color: #b8941f;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
-            margin: 20px 0 12px 0;
+            margin: 25px 0 15px 0;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            border-left: 3px solid #d4af37;
-            padding-left: 10px;
+            letter-spacing: 3px;
+            border-left: 4px solid #d4af37;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .section-title::before {
+            content: '◆';
+            position: absolute;
+            left: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #d4af37;
+            font-size: 12px;
         }
 
         .morse-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 25px;
         }
 
         .morse-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 10px 15px;
-            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 12px 18px;
+            border-radius: 10px;
             border: 1px solid rgba(139, 105, 20, 0.3);
             transition: all 0.3s ease;
             cursor: pointer;
@@ -334,122 +556,157 @@
         }
 
         .morse-item:hover {
-            background: rgba(212, 175, 55, 0.15);
+            background: rgba(212, 175, 55, 0.2);
             border-color: #d4af37;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 
+                0 8px 20px rgba(212, 175, 55, 0.4),
+                0 0 30px rgba(212, 175, 55, 0.2);
         }
 
         .morse-item.playing {
-            background: rgba(212, 175, 55, 0.3);
+            background: rgba(212, 175, 55, 0.4);
             border-color: #ffd700;
             animation: pulse-item 0.3s ease-in-out;
+            box-shadow: 
+                0 0 20px rgba(255, 215, 0, 0.6),
+                0 0 40px rgba(255, 215, 0, 0.3);
         }
 
         @keyframes pulse-item {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.08); }
         }
 
         .morse-item .letter {
             color: #d4af37;
             font-weight: bold;
-            font-size: 18px;
-            min-width: 25px;
+            font-size: 20px;
+            min-width: 30px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
         }
 
         .morse-item .code {
             color: #8b7355;
-            font-size: 14px;
-            letter-spacing: 3px;
+            font-size: 15px;
+            letter-spacing: 4px;
             font-family: 'Courier New', monospace;
         }
 
         .legend {
-            margin-top: 25px;
-            padding-top: 20px;
+            margin-top: 30px;
+            padding-top: 25px;
             border-top: 2px solid #8b6914;
             text-align: center;
         }
 
         .legend-item {
             display: inline-block;
-            margin: 0 15px;
+            margin: 0 20px;
             color: #8b7355;
-            font-size: 14px;
+            font-size: 15px;
         }
 
         .legend-item span {
             color: #d4af37;
             font-weight: bold;
+            font-size: 18px;
         }
 
         /* Scrollbar personnalisée */
-        .reference-panel::-webkit-scrollbar {
-            width: 8px;
+        .reference-panel::-webkit-scrollbar,
+        .history-panel::-webkit-scrollbar {
+            width: 10px;
         }
 
-        .reference-panel::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 4px;
+        .reference-panel::-webkit-scrollbar-track,
+        .history-panel::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 5px;
         }
 
-        .reference-panel::-webkit-scrollbar-thumb {
-            background: #8b6914;
-            border-radius: 4px;
+        .reference-panel::-webkit-scrollbar-thumb,
+        .history-panel::-webkit-scrollbar-thumb {
+            background: linear-gradient(145deg, #8b6914, #d4af37);
+            border-radius: 5px;
+            border: 2px solid rgba(0, 0, 0, 0.3);
         }
 
-        .reference-panel::-webkit-scrollbar-thumb:hover {
-            background: #d4af37;
+        .reference-panel::-webkit-scrollbar-thumb:hover,
+        .history-panel::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(145deg, #d4af37, #ffd700);
         }
 
         /* Responsive */
-        @media (max-width: 1024px) {
+        @media (max-width: 1200px) {
             .container {
-                flex-direction: column;
+                grid-template-columns: 1fr;
                 gap: 40px;
             }
 
+            .telegraph-section {
+                position: static;
+            }
+
             .reference-panel {
-                max-width: 90vw;
+                max-height: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .telegraph-machine {
+                width: 260px;
+                height: 260px;
+            }
+
+            .wood-base {
+                width: 240px;
+                height: 240px;
+            }
+
+            .brass-plate {
+                width: 180px;
+                height: 180px;
+            }
+
+            #morse-btn {
+                width: 140px;
+                height: 140px;
+            }
+
+            #morse-btn::after {
+                font-size: 42px;
+            }
+
+            .title {
+                font-size: 28px;
             }
 
             .morse-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .stats-panel,
+            .history-panel {
+                max-width: 100%;
+            }
         }
 
-        @media (max-width: 600px) {
-            .telegraph-base {
-                width: 220px;
-                height: 220px;
-            }
-
-            .wood-base {
-                width: 200px;
-                height: 200px;
-            }
-
-            .brass-plate {
-                width: 160px;
-                height: 160px;
-            }
-
-            #morse-btn {
-                width: 120px;
-                height: 120px;
-            }
-
-            #morse-btn::after {
-                font-size: 36px;
-            }
-
-            .title {
-                font-size: 24px;
-            }
-
+        @media (max-width: 480px) {
             .morse-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .reference-panel {
+                padding: 20px;
+            }
+
+            .panel-title {
+                font-size: 22px;
             }
         }
     </style>
@@ -459,16 +716,51 @@
     <div class="particles" id="particles"></div>
 
     <div class="container">
-        <!-- Section télégraphe -->
+        <!-- Section principale du télégraphe -->
         <div class="telegraph-section">
-            <h1 class="title">Télégraphe Morse</h1>
-            <p class="subtitle">Appuyez pour transmettre</p>
+            <div class="header">
+                <h1 class="title">Télégraphe Morse</h1>
+                <p class="subtitle">Appuyez pour transmettre</p>
+            </div>
             
-            <div class="telegraph-base">
+            <div class="telegraph-machine">
                 <div class="wood-base"></div>
+                <div class="screw screw-tl"></div>
+                <div class="screw screw-tr"></div>
+                <div class="screw screw-bl"></div>
+                <div class="screw screw-br"></div>
                 <div class="brass-plate"></div>
                 <div class="led-indicator" id="led"></div>
                 <button id="morse-btn"></button>
+            </div>
+
+            <!-- Panneau de statistiques -->
+            <div class="stats-panel">
+                <h3 class="stats-title">📊 Statistiques</h3>
+                <div class="stat-item">
+                    <span class="stat-label">Caractères envoyés</span>
+                    <span class="stat-value" id="charCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Points (·)</span>
+                    <span class="stat-value" id="dotCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Tirets (−)</span>
+                    <span class="stat-value" id="dashCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Temps total</span>
+                    <span class="stat-value" id="totalTime">0.0s</span>
+                </div>
+            </div>
+
+            <!-- Historique -->
+            <div class="history-panel">
+                <h3 class="history-title">📜 Historique</h3>
+                <div id="historyList">
+                    <div class="history-item">En attente de transmission...</div>
+                </div>
             </div>
         </div>
 
@@ -530,7 +822,7 @@
     <script>
         // Création des particules
         const particlesContainer = document.getElementById('particles');
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 40; i++) {
             const particle = document.createElement('div');
             particle.className = 'particle';
             particle.style.left = Math.random() * 100 + '%';
@@ -545,6 +837,19 @@
         let oscillator = null;
         let gainNode = null;
 
+        // Statistiques
+        let stats = {
+            charCount: 0,
+            dotCount: 0,
+            dashCount: 0,
+            totalTime: 0,
+            startTime: null
+        };
+
+        // Historique
+        let history = [];
+        let currentTransmission = '';
+
         // Initialiser le contexte audio
         function initAudio() {
             if (!audioCtx) {
@@ -555,30 +860,29 @@
         function startSound() {
             initAudio();
 
-            // Son principal - oscillateur de base
+            if (!stats.startTime) {
+                stats.startTime = Date.now();
+            }
+
+            // Son principal
             oscillator = audioCtx.createOscillator();
             gainNode = audioCtx.createGain();
             const filter = audioCtx.createBiquadFilter();
             const compressor = audioCtx.createDynamicsCompressor();
 
-            // Oscillateur principal (onde sinusoïdale pure)
             oscillator.type = 'sine';
             oscillator.frequency.setValueAtTime(700, audioCtx.currentTime);
 
-            // Filtre passe-bas pour adoucir le son
             filter.type = 'lowpass';
             filter.frequency.setValueAtTime(1200, audioCtx.currentTime);
             filter.Q.setValueAtTime(1, audioCtx.currentTime);
 
-            // Volume plus fort
             gainNode.gain.setValueAtTime(0.8, audioCtx.currentTime);
 
-            // Compresseur pour éviter la distorsion
             compressor.threshold.setValueAtTime(-20, audioCtx.currentTime);
             compressor.knee.setValueAtTime(10, audioCtx.currentTime);
             compressor.ratio.setValueAtTime(4, audioCtx.currentTime);
 
-            // Connexions
             oscillator.connect(filter);
             filter.connect(gainNode);
             gainNode.connect(compressor);
@@ -591,10 +895,16 @@
 
         function stopSound() {
             if (oscillator) {
-                // Fade out rapide
                 gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
                 oscillator.stop(audioCtx.currentTime + 0.05);
                 oscillator = null;
+                
+                // Mettre à jour les statistiques
+                if (stats.startTime) {
+                    stats.totalTime += (Date.now() - stats.startTime) / 1000;
+                    stats.startTime = null;
+                    updateStats();
+                }
             }
             btn.classList.remove('active');
             led.classList.remove('active');
@@ -630,25 +940,74 @@
             stopSound();
         });
 
+        // Événements clavier
+        let keyboardActive = false;
+        document.addEventListener('keydown', (e) => {
+            // Empêcher la répétition automatique des touches
+            if (e.repeat) return;
+            
+            // Ignorer certaines touches spéciales
+            if (e.key === 'Shift' || e.key === 'Control' || e.key === 'Alt' || 
+                e.key === 'Meta' || e.key === 'CapsLock' || e.key === 'Tab' ||
+                e.key === 'Escape') {
+                return;
+            }
+
+            if (!keyboardActive) {
+                keyboardActive = true;
+                startSound();
+                
+                // Ajouter au transmission actuelle
+                currentTransmission += e.key.toUpperCase();
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (keyboardActive) {
+                keyboardActive = false;
+                stopSound();
+                
+                // Ajouter à l'historique si on a quelque chose
+                if (currentTransmission.length > 0) {
+                    addToHistory(currentTransmission);
+                    stats.charCount += currentTransmission.length;
+                    currentTransmission = '';
+                    updateStats();
+                }
+            }
+        });
+
         // Effet de clic sur les items du tableau
         document.querySelectorAll('.morse-item').forEach(item => {
             item.addEventListener('click', function() {
                 const code = this.querySelector('.code').textContent;
+                const letter = this.querySelector('.letter').textContent;
                 playMorseCode(code, this);
+                
+                // Ajouter aux statistiques
+                addToHistory(letter);
+                stats.charCount++;
+                
+                // Compter les points et tirets
+                for (let char of code) {
+                    if (char === '·') stats.dotCount++;
+                    else if (char === '−') stats.dashCount++;
+                }
+                
+                updateStats();
             });
         });
 
-        // Fonction pour jouer un code morse complet avec son amélioré
+        // Fonction pour jouer un code morse complet
         function playMorseCode(code, element) {
             initAudio();
 
-            // Animation visuelle
             element.classList.add('playing');
             setTimeout(() => {
                 element.classList.remove('playing');
             }, 1000);
 
-            let time = audioCtx.currentTime + 0.1; // Petit délai pour éviter le chevauchement
+            let time = audioCtx.currentTime + 0.1;
             const dotDuration = 0.12;
             const dashDuration = 0.36;
             const gapDuration = 0.12;
@@ -665,52 +1024,40 @@
             }
         }
 
-        // Fonction pour jouer une tonalité avec son riche et fort
+        // Fonction pour jouer une tonalité
         function playTone(startTime, duration) {
-            // Oscillateur principal
             const osc1 = audioCtx.createOscillator();
             const gain1 = audioCtx.createGain();
             
-            // Oscillateur pour harmonique (son plus riche)
             const osc2 = audioCtx.createOscillator();
             const gain2 = audioCtx.createGain();
 
-            // Oscillateur principal - onde sinusoïdale
             osc1.type = 'sine';
             osc1.frequency.setValueAtTime(700, startTime);
 
-            // Oscillateur secondaire - harmonique à 1400Hz (octave supérieure)
             osc2.type = 'sine';
             osc2.frequency.setValueAtTime(1400, startTime);
 
-            // Enveloppe ADSR pour un son plus naturel
-            // Attack
             gain1.gain.setValueAtTime(0, startTime);
             gain1.gain.linearRampToValueAtTime(0.7, startTime + 0.01);
-            // Sustain
             gain1.gain.setValueAtTime(0.7, startTime + duration - 0.03);
-            // Release
             gain1.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
 
-            // Harmonique plus faible
             gain2.gain.setValueAtTime(0, startTime);
             gain2.gain.linearRampToValueAtTime(0.2, startTime + 0.01);
             gain2.gain.setValueAtTime(0.2, startTime + duration - 0.03);
             gain2.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
 
-            // Filtre
             const filter = audioCtx.createBiquadFilter();
             filter.type = 'lowpass';
             filter.frequency.setValueAtTime(1500, startTime);
             filter.Q.setValueAtTime(2, startTime);
 
-            // Compresseur
             const compressor = audioCtx.createDynamicsCompressor();
             compressor.threshold.setValueAtTime(-15, startTime);
             compressor.knee.setValueAtTime(10, startTime);
             compressor.ratio.setValueAtTime(3, startTime);
 
-            // Connexions
             osc1.connect(gain1);
             osc2.connect(gain2);
             gain1.connect(filter);
@@ -718,11 +1065,37 @@
             filter.connect(compressor);
             compressor.connect(audioCtx.destination);
 
-            // Démarrage et arrêt
             osc1.start(startTime);
             osc2.start(startTime);
             osc1.stop(startTime + duration);
             osc2.stop(startTime + duration);
+        }
+
+        // Mettre à jour les statistiques
+        function updateStats() {
+            document.getElementById('charCount').textContent = stats.charCount;
+            document.getElementById('dotCount').textContent = stats.dotCount;
+            document.getElementById('dashCount').textContent = stats.dashCount;
+            document.getElementById('totalTime').textContent = stats.totalTime.toFixed(1) + 's';
+        }
+
+        // Ajouter à l'historique
+        function addToHistory(text) {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            
+            history.unshift({ text, time: timeStr });
+            
+            // Garder seulement les 10 derniers
+            if (history.length > 10) {
+                history = history.slice(0, 10);
+            }
+            
+            // Mettre à jour l'affichage
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = history.map(item => 
+                `<div class="history-item">[${item.time}] ${item.text}</div>`
+            ).join('');
         }
     </script>
 </body>

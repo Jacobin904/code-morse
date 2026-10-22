@@ -314,13 +314,41 @@
             border: 1px solid rgba(139, 105, 20, 0.3);
             transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .morse-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .morse-item:hover::before {
+            left: 100%;
         }
 
         .morse-item:hover {
-            background: rgba(212, 175, 55, 0.1);
+            background: rgba(212, 175, 55, 0.15);
             border-color: #d4af37;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .morse-item.playing {
+            background: rgba(212, 175, 55, 0.3);
+            border-color: #ffd700;
+            animation: pulse-item 0.3s ease-in-out;
+        }
+
+        @keyframes pulse-item {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .morse-item .letter {
@@ -517,28 +545,44 @@
         let oscillator = null;
         let gainNode = null;
 
-        function startSound() {
+        // Initialiser le contexte audio
+        function initAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
+        }
 
-            // Son plus riche avec plusieurs oscillateurs
+        function startSound() {
+            initAudio();
+
+            // Son principal - oscillateur de base
             oscillator = audioCtx.createOscillator();
             gainNode = audioCtx.createGain();
             const filter = audioCtx.createBiquadFilter();
+            const compressor = audioCtx.createDynamicsCompressor();
 
+            // Oscillateur principal (onde sinusoïdale pure)
             oscillator.type = 'sine';
             oscillator.frequency.setValueAtTime(700, audioCtx.currentTime);
 
-            // Filtre pour un son plus réaliste
+            // Filtre passe-bas pour adoucir le son
             filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
+            filter.frequency.setValueAtTime(1200, audioCtx.currentTime);
+            filter.Q.setValueAtTime(1, audioCtx.currentTime);
 
-            gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            // Volume plus fort
+            gainNode.gain.setValueAtTime(0.8, audioCtx.currentTime);
 
+            // Compresseur pour éviter la distorsion
+            compressor.threshold.setValueAtTime(-20, audioCtx.currentTime);
+            compressor.knee.setValueAtTime(10, audioCtx.currentTime);
+            compressor.ratio.setValueAtTime(4, audioCtx.currentTime);
+
+            // Connexions
             oscillator.connect(filter);
             filter.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
+            gainNode.connect(compressor);
+            compressor.connect(audioCtx.destination);
 
             oscillator.start();
             btn.classList.add('active');
@@ -547,6 +591,7 @@
 
         function stopSound() {
             if (oscillator) {
+                // Fade out rapide
                 gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
                 oscillator.stop(audioCtx.currentTime + 0.05);
                 oscillator = null;
@@ -585,24 +630,28 @@
             stopSound();
         });
 
-        // Effet de hover sur les items du tableau
+        // Effet de clic sur les items du tableau
         document.querySelectorAll('.morse-item').forEach(item => {
             item.addEventListener('click', function() {
                 const code = this.querySelector('.code').textContent;
-                playMorseCode(code);
+                playMorseCode(code, this);
             });
         });
 
-        // Fonction pour jouer un code morse complet
-        function playMorseCode(code) {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
+        // Fonction pour jouer un code morse complet avec son amélioré
+        function playMorseCode(code, element) {
+            initAudio();
 
-            let time = audioCtx.currentTime;
-            const dotDuration = 0.1;
-            const dashDuration = 0.3;
-            const gapDuration = 0.1;
+            // Animation visuelle
+            element.classList.add('playing');
+            setTimeout(() => {
+                element.classList.remove('playing');
+            }, 1000);
+
+            let time = audioCtx.currentTime + 0.1; // Petit délai pour éviter le chevauchement
+            const dotDuration = 0.12;
+            const dashDuration = 0.36;
+            const gapDuration = 0.12;
 
             for (let i = 0; i < code.length; i++) {
                 const char = code[i];
@@ -616,26 +665,64 @@
             }
         }
 
+        // Fonction pour jouer une tonalité avec son riche et fort
         function playTone(startTime, duration) {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
+            // Oscillateur principal
+            const osc1 = audioCtx.createOscillator();
+            const gain1 = audioCtx.createGain();
+            
+            // Oscillateur pour harmonique (son plus riche)
+            const osc2 = audioCtx.createOscillator();
+            const gain2 = audioCtx.createGain();
+
+            // Oscillateur principal - onde sinusoïdale
+            osc1.type = 'sine';
+            osc1.frequency.setValueAtTime(700, startTime);
+
+            // Oscillateur secondaire - harmonique à 1400Hz (octave supérieure)
+            osc2.type = 'sine';
+            osc2.frequency.setValueAtTime(1400, startTime);
+
+            // Enveloppe ADSR pour un son plus naturel
+            // Attack
+            gain1.gain.setValueAtTime(0, startTime);
+            gain1.gain.linearRampToValueAtTime(0.7, startTime + 0.01);
+            // Sustain
+            gain1.gain.setValueAtTime(0.7, startTime + duration - 0.03);
+            // Release
+            gain1.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+
+            // Harmonique plus faible
+            gain2.gain.setValueAtTime(0, startTime);
+            gain2.gain.linearRampToValueAtTime(0.2, startTime + 0.01);
+            gain2.gain.setValueAtTime(0.2, startTime + duration - 0.03);
+            gain2.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+
+            // Filtre
             const filter = audioCtx.createBiquadFilter();
-
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(700, startTime);
-
             filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(1000, startTime);
+            filter.frequency.setValueAtTime(1500, startTime);
+            filter.Q.setValueAtTime(2, startTime);
 
-            gain.gain.setValueAtTime(0.3, startTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+            // Compresseur
+            const compressor = audioCtx.createDynamicsCompressor();
+            compressor.threshold.setValueAtTime(-15, startTime);
+            compressor.knee.setValueAtTime(10, startTime);
+            compressor.ratio.setValueAtTime(3, startTime);
 
-            osc.connect(filter);
-            filter.connect(gain);
-            gain.connect(audioCtx.destination);
+            // Connexions
+            osc1.connect(gain1);
+            osc2.connect(gain2);
+            gain1.connect(filter);
+            gain2.connect(filter);
+            filter.connect(compressor);
+            compressor.connect(audioCtx.destination);
 
-            osc.start(startTime);
-            osc.stop(startTime + duration);
+            // Démarrage et arrêt
+            osc1.start(startTime);
+            osc2.start(startTime);
+            osc1.stop(startTime + duration);
+            osc2.stop(startTime + duration);
         }
     </script>
 </body>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Morse</title>
+    <title>Code Morse - Télégraphe Virtuel</title>
     <style>
         * {
             margin: 0;
@@ -12,238 +12,507 @@
         }
 
         body {
+            min-height: 100vh;
+            background: #0a0a0a;
+            font-family: 'Georgia', serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Fond avec texture et effet */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at center, rgba(30, 20, 10, 0.8) 0%, rgba(0, 0, 0, 1) 100%),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(139, 90, 43, 0.03) 2px,
+                    rgba(139, 90, 43, 0.03) 4px
+                );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Particules flottantes */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(212, 175, 55, 0.6);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #1a1a2e;
-            font-family: 'Courier New', monospace;
-            overflow-x: hidden;
-        }
-
-        .container {
-            display: flex;
-            align-items: center;
-            gap: 60px;
+            gap: 80px;
+            padding: 40px 20px;
             flex-wrap: wrap;
-            justify-content: center;
-            padding: 20px;
         }
 
+        /* Section du bouton télégraphe */
+        .telegraph-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .title {
+            color: #d4af37;
+            font-size: 32px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #8b7355;
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-align: center;
+            margin-top: -20px;
+        }
+
+        /* Bouton télégraphe réaliste en 3D */
+        .telegraph-base {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Base en bois */
+        .wood-base {
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            background: linear-gradient(145deg, #3d2817, #2a1810);
+            border-radius: 20px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.8),
+                inset 0 2px 4px rgba(255, 255, 255, 0.1),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.5);
+            border: 3px solid #1a0f08;
+        }
+
+        /* Plaque en laiton */
+        .brass-plate {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(145deg, #d4af37, #b8941f);
+            border-radius: 50%;
+            box-shadow: 
+                0 8px 20px rgba(0, 0, 0, 0.6),
+                inset 0 2px 8px rgba(255, 255, 255, 0.3),
+                inset 0 -2px 8px rgba(0, 0, 0, 0.4);
+            border: 2px solid #8b6914;
+        }
+
+        /* Bouton principal */
         #morse-btn {
-            width: 250px;
-            height: 250px;
+            position: relative;
+            width: 160px;
+            height: 160px;
             border-radius: 50%;
             border: none;
-            background: linear-gradient(145deg, #e94560, #c81e45);
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.4);
-            transition: transform 0.1s, box-shadow 0.1s;
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.8),
+                0 5px 15px rgba(0, 0, 0, 0.6),
+                inset 0 2px 4px rgba(255, 255, 255, 0.2),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.8);
+            transition: all 0.1s ease;
             user-select: none;
             -webkit-user-select: none;
             -webkit-tap-highlight-color: transparent;
-            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        #morse-btn::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1), transparent);
+            pointer-events: none;
+        }
+
+        #morse-btn::after {
+            content: '⚡';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            color: #d4af37;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            pointer-events: none;
         }
 
         #morse-btn:active,
         #morse-btn.active {
-            transform: scale(0.95);
-            box-shadow: 0 5px 15px rgba(233, 69, 96, 0.6);
-            background: linear-gradient(145deg, #ff6b81, #e94560);
+            transform: translateY(8px);
+            box-shadow: 
+                0 5px 15px rgba(0, 0, 0, 0.8),
+                0 2px 8px rgba(0, 0, 0, 0.6),
+                inset 0 2px 4px rgba(0, 0, 0, 0.8),
+                inset 0 -1px 2px rgba(255, 255, 255, 0.1);
         }
 
-        .pulse {
-            animation: pulse 0.5s infinite;
+        #morse-btn.active::after {
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            animation: glow 0.3s ease-in-out;
         }
 
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(233, 69, 96, 0.7); }
-            70% { box-shadow: 0 0 0 30px rgba(233, 69, 96, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(233, 69, 96, 0); }
+        @keyframes glow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.5); }
         }
 
-        .morse-table {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(233, 69, 96, 0.3);
+        /* Indicateur LED */
+        .led-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 12px;
+            height: 12px;
+            background: #333;
+            border-radius: 50%;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.8);
+            transition: all 0.1s;
+        }
+
+        .led-indicator.active {
+            background: #ff0000;
+            box-shadow: 
+                0 0 10px rgba(255, 0, 0, 0.8),
+                0 0 20px rgba(255, 0, 0, 0.4),
+                inset 0 1px 2px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Panneau de référence */
+        .reference-panel {
+            background: linear-gradient(145deg, rgba(30, 20, 10, 0.9), rgba(20, 15, 8, 0.95));
+            border: 2px solid #8b6914;
             border-radius: 15px;
-            padding: 25px;
-            max-height: 80vh;
+            padding: 30px;
+            max-width: 500px;
+            max-height: 85vh;
             overflow-y: auto;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.8),
+                inset 0 1px 2px rgba(255, 255, 255, 0.1);
+            position: relative;
         }
 
-        .morse-table h2 {
-            color: #e94560;
+        .reference-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 20px,
+                rgba(139, 105, 20, 0.05) 20px,
+                rgba(139, 105, 20, 0.05) 21px
+            );
+            pointer-events: none;
+            border-radius: 15px;
+        }
+
+        .panel-title {
+            color: #d4af37;
+            font-size: 24px;
+            font-weight: bold;
             text-align: center;
-            margin-bottom: 15px;
-            font-size: 20px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            border-bottom: 2px solid #8b6914;
+            padding-bottom: 15px;
+        }
+
+        .section-title {
+            color: #b8941f;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 20px 0 12px 0;
             text-transform: uppercase;
             letter-spacing: 2px;
-        }
-
-        .morse-section {
-            margin-bottom: 15px;
-        }
-
-        .morse-section h3 {
-            color: #ff6b81;
-            font-size: 14px;
-            margin-bottom: 8px;
-            border-bottom: 1px solid rgba(233, 69, 96, 0.2);
-            padding-bottom: 5px;
+            border-left: 3px solid #d4af37;
+            padding-left: 10px;
         }
 
         .morse-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .morse-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 5px 10px;
-            border-radius: 5px;
-            border: 1px solid rgba(233, 69, 96, 0.1);
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(139, 105, 20, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .morse-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: #d4af37;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
         }
 
         .morse-item .letter {
-            color: #ffffff;
+            color: #d4af37;
             font-weight: bold;
-            font-size: 16px;
-            min-width: 20px;
+            font-size: 18px;
+            min-width: 25px;
         }
 
         .morse-item .code {
-            color: #e94560;
+            color: #8b7355;
             font-size: 14px;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            font-family: 'Courier New', monospace;
         }
 
         .legend {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #8b6914;
             text-align: center;
-            margin-top: 15px;
-            padding-top: 10px;
-            border-top: 1px solid rgba(233, 69, 96, 0.2);
-            color: #888;
-            font-size: 12px;
         }
 
-        .legend span {
+        .legend-item {
             display: inline-block;
-            margin: 0 10px;
+            margin: 0 15px;
+            color: #8b7355;
+            font-size: 14px;
         }
 
-        .legend .dot {
-            color: #e94560;
-        }
-
-        .legend .dash {
-            color: #e94560;
+        .legend-item span {
+            color: #d4af37;
+            font-weight: bold;
         }
 
         /* Scrollbar personnalisée */
-        .morse-table::-webkit-scrollbar {
-            width: 6px;
+        .reference-panel::-webkit-scrollbar {
+            width: 8px;
         }
 
-        .morse-table::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 3px;
+        .reference-panel::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
         }
 
-        .morse-table::-webkit-scrollbar-thumb {
-            background: #e94560;
-            border-radius: 3px;
+        .reference-panel::-webkit-scrollbar-thumb {
+            background: #8b6914;
+            border-radius: 4px;
+        }
+
+        .reference-panel::-webkit-scrollbar-thumb:hover {
+            background: #d4af37;
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             .container {
                 flex-direction: column;
-                gap: 30px;
+                gap: 40px;
             }
 
-            #morse-btn {
-                width: 180px;
-                height: 180px;
-                font-size: 18px;
+            .reference-panel {
+                max-width: 90vw;
             }
 
             .morse-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+
+        @media (max-width: 600px) {
+            .telegraph-base {
+                width: 220px;
+                height: 220px;
+            }
+
+            .wood-base {
+                width: 200px;
+                height: 200px;
+            }
+
+            .brass-plate {
+                width: 160px;
+                height: 160px;
+            }
+
+            #morse-btn {
+                width: 120px;
+                height: 120px;
+            }
+
+            #morse-btn::after {
+                font-size: 36px;
+            }
+
+            .title {
+                font-size: 24px;
+            }
+
+            .morse-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Particules flottantes -->
+    <div class="particles" id="particles"></div>
+
     <div class="container">
-        <button id="morse-btn">APPUIE</button>
+        <!-- Section télégraphe -->
+        <div class="telegraph-section">
+            <h1 class="title">Télégraphe Morse</h1>
+            <p class="subtitle">Appuyez pour transmettre</p>
+            
+            <div class="telegraph-base">
+                <div class="wood-base"></div>
+                <div class="brass-plate"></div>
+                <div class="led-indicator" id="led"></div>
+                <button id="morse-btn"></button>
+            </div>
+        </div>
 
-        <div class="morse-table">
-            <h2>📡 Code Morse</h2>
+        <!-- Panneau de référence -->
+        <div class="reference-panel">
+            <h2 class="panel-title">📡 Code International</h2>
 
-            <div class="morse-section">
-                <h3>Lettres</h3>
-                <div class="morse-grid">
-                    <div class="morse-item"><span class="letter">A</span><span class="code">· −</span></div>
-                    <div class="morse-item"><span class="letter">B</span><span class="code">− · · ·</span></div>
-                    <div class="morse-item"><span class="letter">C</span><span class="code">− · − ·</span></div>
-                    <div class="morse-item"><span class="letter">D</span><span class="code">− · ·</span></div>
-                    <div class="morse-item"><span class="letter">E</span><span class="code">·</span></div>
-                    <div class="morse-item"><span class="letter">F</span><span class="code">· · − ·</span></div>
-                    <div class="morse-item"><span class="letter">G</span><span class="code">− − ·</span></div>
-                    <div class="morse-item"><span class="letter">H</span><span class="code">· · · ·</span></div>
-                    <div class="morse-item"><span class="letter">I</span><span class="code">· ·</span></div>
-                    <div class="morse-item"><span class="letter">J</span><span class="code">· − − −</span></div>
-                    <div class="morse-item"><span class="letter">K</span><span class="code">− · −</span></div>
-                    <div class="morse-item"><span class="letter">L</span><span class="code">· − · ·</span></div>
-                    <div class="morse-item"><span class="letter">M</span><span class="code">− −</span></div>
-                    <div class="morse-item"><span class="letter">N</span><span class="code">− ·</span></div>
-                    <div class="morse-item"><span class="letter">O</span><span class="code">− − −</span></div>
-                    <div class="morse-item"><span class="letter">P</span><span class="code">· − − ·</span></div>
-                    <div class="morse-item"><span class="letter">Q</span><span class="code">− − · −</span></div>
-                    <div class="morse-item"><span class="letter">R</span><span class="code">· − ·</span></div>
-                    <div class="morse-item"><span class="letter">S</span><span class="code">· · ·</span></div>
-                    <div class="morse-item"><span class="letter">T</span><span class="code">−</span></div>
-                    <div class="morse-item"><span class="letter">U</span><span class="code">· · −</span></div>
-                    <div class="morse-item"><span class="letter">V</span><span class="code">· · · −</span></div>
-                    <div class="morse-item"><span class="letter">W</span><span class="code">· − −</span></div>
-                    <div class="morse-item"><span class="letter">X</span><span class="code">− · · −</span></div>
-                    <div class="morse-item"><span class="letter">Y</span><span class="code">− · − −</span></div>
-                    <div class="morse-item"><span class="letter">Z</span><span class="code">− − · ·</span></div>
-                </div>
+            <h3 class="section-title">Lettres</h3>
+            <div class="morse-grid">
+                <div class="morse-item"><span class="letter">A</span><span class="code">· −</span></div>
+                <div class="morse-item"><span class="letter">B</span><span class="code">− · · ·</span></div>
+                <div class="morse-item"><span class="letter">C</span><span class="code">− · − ·</span></div>
+                <div class="morse-item"><span class="letter">D</span><span class="code">− · ·</span></div>
+                <div class="morse-item"><span class="letter">E</span><span class="code">·</span></div>
+                <div class="morse-item"><span class="letter">F</span><span class="code">· · − ·</span></div>
+                <div class="morse-item"><span class="letter">G</span><span class="code">− − ·</span></div>
+                <div class="morse-item"><span class="letter">H</span><span class="code">· · · ·</span></div>
+                <div class="morse-item"><span class="letter">I</span><span class="code">· ·</span></div>
+                <div class="morse-item"><span class="letter">J</span><span class="code">· − − −</span></div>
+                <div class="morse-item"><span class="letter">K</span><span class="code">− · −</span></div>
+                <div class="morse-item"><span class="letter">L</span><span class="code">· − · ·</span></div>
+                <div class="morse-item"><span class="letter">M</span><span class="code">− −</span></div>
+                <div class="morse-item"><span class="letter">N</span><span class="code">− ·</span></div>
+                <div class="morse-item"><span class="letter">O</span><span class="code">− − −</span></div>
+                <div class="morse-item"><span class="letter">P</span><span class="code">· − − ·</span></div>
+                <div class="morse-item"><span class="letter">Q</span><span class="code">− − · −</span></div>
+                <div class="morse-item"><span class="letter">R</span><span class="code">· − ·</span></div>
+                <div class="morse-item"><span class="letter">S</span><span class="code">· · ·</span></div>
+                <div class="morse-item"><span class="letter">T</span><span class="code">−</span></div>
+                <div class="morse-item"><span class="letter">U</span><span class="code">· · −</span></div>
+                <div class="morse-item"><span class="letter">V</span><span class="code">· · · −</span></div>
+                <div class="morse-item"><span class="letter">W</span><span class="code">· − −</span></div>
+                <div class="morse-item"><span class="letter">X</span><span class="code">− · · −</span></div>
+                <div class="morse-item"><span class="letter">Y</span><span class="code">− · − −</span></div>
+                <div class="morse-item"><span class="letter">Z</span><span class="code">− − · ·</span></div>
             </div>
 
-            <div class="morse-section">
-                <h3>Chiffres</h3>
-                <div class="morse-grid">
-                    <div class="morse-item"><span class="letter">0</span><span class="code">− − − − −</span></div>
-                    <div class="morse-item"><span class="letter">1</span><span class="code">· − − − −</span></div>
-                    <div class="morse-item"><span class="letter">2</span><span class="code">· · − − −</span></div>
-                    <div class="morse-item"><span class="letter">3</span><span class="code">· · · − −</span></div>
-                    <div class="morse-item"><span class="letter">4</span><span class="code">· · · · −</span></div>
-                    <div class="morse-item"><span class="letter">5</span><span class="code">· · · · ·</span></div>
-                    <div class="morse-item"><span class="letter">6</span><span class="code">− · · · ·</span></div>
-                    <div class="morse-item"><span class="letter">7</span><span class="code">− − · · ·</span></div>
-                    <div class="morse-item"><span class="letter">8</span><span class="code">− − − · ·</span></div>
-                    <div class="morse-item"><span class="letter">9</span><span class="code">− − − − ·</span></div>
-                </div>
+            <h3 class="section-title">Chiffres</h3>
+            <div class="morse-grid">
+                <div class="morse-item"><span class="letter">0</span><span class="code">− − − − −</span></div>
+                <div class="morse-item"><span class="letter">1</span><span class="code">· − − − −</span></div>
+                <div class="morse-item"><span class="letter">2</span><span class="code">· · − − −</span></div>
+                <div class="morse-item"><span class="letter">3</span><span class="code">· · · − −</span></div>
+                <div class="morse-item"><span class="letter">4</span><span class="code">· · · · −</span></div>
+                <div class="morse-item"><span class="letter">5</span><span class="code">· · · · ·</span></div>
+                <div class="morse-item"><span class="letter">6</span><span class="code">− · · · ·</span></div>
+                <div class="morse-item"><span class="letter">7</span><span class="code">− − · · ·</span></div>
+                <div class="morse-item"><span class="letter">8</span><span class="code">− − − · ·</span></div>
+                <div class="morse-item"><span class="letter">9</span><span class="code">− − − − ·</span></div>
             </div>
 
             <div class="legend">
-                <span class="dot">· = court (1 clic)</span>
-                <span class="dash">− = long (3 clics)</span>
+                <div class="legend-item"><span>·</span> = Point (court)</div>
+                <div class="legend-item"><span>−</span> = Tiret (long)</div>
             </div>
         </div>
     </div>
 
     <script>
+        // Création des particules
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
         const btn = document.getElementById('morse-btn');
+        const led = document.getElementById('led');
         let audioCtx = null;
         let oscillator = null;
         let gainNode = null;
@@ -253,19 +522,27 @@
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
 
+            // Son plus riche avec plusieurs oscillateurs
             oscillator = audioCtx.createOscillator();
             gainNode = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
 
-            oscillator.type = 'square';
+            oscillator.type = 'sine';
             oscillator.frequency.setValueAtTime(700, audioCtx.currentTime);
 
-            gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            // Filtre pour un son plus réaliste
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
 
-            oscillator.connect(gainNode);
+            gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime);
+
+            oscillator.connect(filter);
+            filter.connect(gainNode);
             gainNode.connect(audioCtx.destination);
 
             oscillator.start();
-            btn.classList.add('active', 'pulse');
+            btn.classList.add('active');
+            led.classList.add('active');
         }
 
         function stopSound() {
@@ -274,10 +551,11 @@
                 oscillator.stop(audioCtx.currentTime + 0.05);
                 oscillator = null;
             }
-            btn.classList.remove('active', 'pulse');
+            btn.classList.remove('active');
+            led.classList.remove('active');
         }
 
-        // Souris
+        // Événements souris
         btn.addEventListener('mousedown', (e) => {
             e.preventDefault();
             startSound();
@@ -292,7 +570,7 @@
             stopSound();
         });
 
-        // Tactile (mobile)
+        // Événements tactiles
         btn.addEventListener('touchstart', (e) => {
             e.preventDefault();
             startSound();
@@ -306,6 +584,59 @@
         btn.addEventListener('touchcancel', (e) => {
             stopSound();
         });
+
+        // Effet de hover sur les items du tableau
+        document.querySelectorAll('.morse-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const code = this.querySelector('.code').textContent;
+                playMorseCode(code);
+            });
+        });
+
+        // Fonction pour jouer un code morse complet
+        function playMorseCode(code) {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            let time = audioCtx.currentTime;
+            const dotDuration = 0.1;
+            const dashDuration = 0.3;
+            const gapDuration = 0.1;
+
+            for (let i = 0; i < code.length; i++) {
+                const char = code[i];
+                if (char === '·') {
+                    playTone(time, dotDuration);
+                    time += dotDuration + gapDuration;
+                } else if (char === '−') {
+                    playTone(time, dashDuration);
+                    time += dashDuration + gapDuration;
+                }
+            }
+        }
+
+        function playTone(startTime, duration) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(700, startTime);
+
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(1000, startTime);
+
+            gain.gain.setValueAtTime(0.3, startTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(startTime);
+            osc.stop(startTime + duration);
+        }
     </script>
 </body>
 </html>
